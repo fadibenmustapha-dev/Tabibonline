@@ -1,0 +1,9 @@
+Ce dossier contient les captures d'écran des Pull Requests et revues de code GitHub.
+
+Pour chaque PR, ajouter :
+- pr_<membre>_sprint<1|2>_review.png   (capture montrant le commentaire de review)
+- pr_<membre>_sprint<1|2>_merge.png    (capture montrant le merge réussi)
+
+Exemple :
+- pr_yahya_sprint1_review.png
+- pr_mohamed_sprint1_merge.png

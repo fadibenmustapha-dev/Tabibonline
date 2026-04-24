@@ -1,0 +1,8 @@
+Ce dossier contient les exports PNG des maquettes Figma.
+
+Chaque membre doit y déposer ses captures d'écran :
+- Yahya   : ecran_inscription.png + ecran_connexion.png
+- Mohamed : ecran_profil_medecin.png + ecran_disponibilites.png
+- Motaz   : ecran_recherche.png + ecran_reservation.png
+- Fedi    : ecran_avis.png + ecran_formulaire_notation.png
+- Salma   : ecran_dashboard.png + ecran_gestion_medecins.png

@@ -1,11 +1,11 @@
 package com.tabibonline.models;
 
 /**
- * Classe Utilisateur
+ * Classe abstraite Utilisateur — superclasse de Patient, Medecin, Administrateur
  * Responsable : Yahya (Product Owner)
  * Branche : feature/authentification
  */
-public class Utilisateur {
+public abstract class Utilisateur {
 
     // ─── Attributs privés ─────────────────────────────────────────────────────
     private int    id;

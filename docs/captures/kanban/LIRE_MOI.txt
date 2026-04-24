@@ -1,0 +1,8 @@
+Ce dossier contient les captures d'écran du tableau Kanban (GitHub Projects / Jira / Trello).
+
+Nommer les fichiers comme suit :
+- kanban_sprint1_debut.png
+- kanban_sprint1_milieu.png
+- kanban_sprint1_fin.png
+- kanban_sprint2_debut.png
+- kanban_sprint2_fin.png
