@@ -1,0 +1,218 @@
+@startuml DC_TabibOnline
+
+skinparam classBackgroundColor  #EEF4FF
+skinparam classBorderColor      #2C3E7A
+skinparam classArrowColor       #2C3E7A
+skinparam backgroundColor       #FEFEFE
+skinparam ClassFontStyle        bold
+skinparam legendBackgroundColor #FFFDE7
+
+title Diagramme de Classes — TabibOnline\nProjet AGL 2025/2026 — FSEGT, Tunis El Manar
+
+' ══════════════════════════════════════════════════════════════════════════════
+' CLASSE ABSTRAITE — Utilisateur  (Yahya)
+' ══════════════════════════════════════════════════════════════════════════════
+abstract class Utilisateur {
+  - id          : int
+  - nom         : String
+  - prenom      : String
+  - email       : String
+  - motDePasse  : String
+  - telephone   : String
+  - estActif    : boolean
+  --
+  + Utilisateur()
+  + Utilisateur(id, nom, prenom, email, motDePasse, telephone)
+  + seConnecter(email, motDePasse) : boolean
+  + afficherDetails() : void
+  + toString() : String
+  + getId() : int
+  + getNom() : String
+  + getEmail() : String
+  + isEstActif() : boolean
+  + setEstActif(b : boolean) : void
+}
+
+' ══════════════════════════════════════════════════════════════════════════════
+' Patient  (Yahya)
+' ══════════════════════════════════════════════════════════════════════════════
+class Patient {
+  - dateNaissance  : String
+  - groupeSanguin  : String
+  - historiqueRdv  : List<RendezVous>
+  --
+  + Patient()
+  + Patient(id, nom, prenom, email, mdp, tel, dateNaissance, groupeSanguin)
+  + sInscrire() : boolean
+  + ajouterRdv(rdv : RendezVous) : void
+  + annulerRdv(rdv : RendezVous) : void
+  + getHistoriqueRdv() : List<RendezVous>
+  + afficherDetails() : void
+}
+
+' ══════════════════════════════════════════════════════════════════════════════
+' Medecin  (Mohamed)
+' ══════════════════════════════════════════════════════════════════════════════
+class Medecin {
+  - specialite     : String
+  - numeroOrdre    : String
+  - cabinet        : String
+  - tarif          : double
+  - note           : double
+  - estValide      : boolean
+  - disponibilites : List<Disponibilite>
+  --
+  + Medecin()
+  + Medecin(id, nom, prenom, email, mdp, tel, specialite, numeroOrdre, cabinet, tarif)
+  + ajouterDisponibilite(d : Disponibilite) : void
+  + supprimerDisponibilite(d : Disponibilite) : boolean
+  + getDisponibilitesLibres() : List<Disponibilite>
+  + mettreAJourNote(note : double) : void
+  + afficherProfil() : void
+  + isEstValide() : boolean
+  + getTarif() : double
+}
+
+' ══════════════════════════════════════════════════════════════════════════════
+' Disponibilite  (Mohamed)
+' ══════════════════════════════════════════════════════════════════════════════
+class Disponibilite {
+  - id            : int
+  - jour          : String
+  - heureDebut    : String
+  - heureFin      : String
+  - estDisponible : boolean
+  --
+  + Disponibilite()
+  + Disponibilite(id, jour, heureDebut, heureFin)
+  + reserver() : void
+  + liberer() : void
+  + afficherDetails() : void
+  + isEstDisponible() : boolean
+  + getJour() : String
+  + getHeureDebut() : String
+}
+
+' ══════════════════════════════════════════════════════════════════════════════
+' RendezVous  (Motaz)
+' ══════════════════════════════════════════════════════════════════════════════
+class RendezVous {
+  - id      : int
+  - date    : String
+  - heure   : String
+  - motif   : String
+  - statut  : Statut
+  - montant : double
+  --
+  + RendezVous()
+  + RendezVous(id, patient, medecin, date, heure, motif)
+  + confirmer() : void
+  + annuler() : void
+  + terminer() : void
+  + afficherDetails() : void
+  + getStatut() : Statut
+  + getMontant() : double
+}
+
+enum Statut {
+  EN_ATTENTE
+  CONFIRME
+  ANNULE
+  TERMINE
+}
+
+' ══════════════════════════════════════════════════════════════════════════════
+' RechercheMedecin  (Motaz)
+' ══════════════════════════════════════════════════════════════════════════════
+class RechercheMedecin {
+  - listeMedecins      : List<Medecin>
+  - critereSpecialite  : String
+  - tarifMax           : double
+  --
+  + RechercheMedecin()
+  + RechercheMedecin(listeMedecins : List<Medecin>)
+  + rechercherParSpecialite(specialite : String) : List<Medecin>
+  + rechercherParTarifMax(tarifMax : double) : List<Medecin>
+  + afficherResultats(resultats : List<Medecin>) : void
+  + ajouterMedecin(m : Medecin) : void
+}
+
+' ══════════════════════════════════════════════════════════════════════════════
+' Avis  (Fedi)
+' ══════════════════════════════════════════════════════════════════════════════
+class Avis {
+  - id          : int
+  - note        : int
+  - commentaire : String
+  - dateAvis    : String
+  --
+  + Avis()
+  + Avis(id, patient, medecin, rdv, note, commentaire)
+  + soumettre() : boolean
+  + afficherDetails() : void
+  + getNote() : int
+  + getCommentaire() : String
+}
+
+' ══════════════════════════════════════════════════════════════════════════════
+' Administrateur  (Salma)
+' ══════════════════════════════════════════════════════════════════════════════
+class Administrateur {
+  - niveauAcces : int
+  - nbActions   : int
+  --
+  + Administrateur()
+  + Administrateur(id, nom, prenom, email, mdp, tel, niveauAcces)
+  + validerMedecin(medecin : Medecin) : void
+  + rejeterMedecin(medecin : Medecin) : void
+  + afficherTableauDeBord(patients, medecins, rdvs) : void
+  + afficherDetails() : void
+}
+
+' ══════════════════════════════════════════════════════════════════════════════
+' Notification  (Salma)
+' ══════════════════════════════════════════════════════════════════════════════
+class Notification {
+  - id          : int
+  - message     : String
+  - type        : TypeNotification
+  - estLue      : boolean
+  - dateEnvoi   : String
+  --
+  + Notification()
+  + Notification(id, message, type, destinataire)
+  + envoyer() : void
+  + marquerCommeLue() : void
+  + afficherDetails() : void
+}
+
+enum TypeNotification {
+  CONFIRMATION_RDV
+  ANNULATION_RDV
+  VALIDATION_MEDECIN
+  ALERTE
+}
+
+' ══════════════════════════════════════════════════════════════════════════════
+' RELATIONS D'HÉRITAGE
+' ══════════════════════════════════════════════════════════════════════════════
+Utilisateur    <|--    Patient         : "hérite"
+Utilisateur    <|--    Medecin         : "hérite"
+Utilisateur    <|--    Administrateur  : "hérite"
+
+' ══════════════════════════════════════════════════════════════════════════════
+' ASSOCIATIONS, AGRÉGATIONS, COMPOSITIONS
+' ══════════════════════════════════════════════════════════════════════════════
+Patient        "1"  o--  "0..*"  RendezVous       : "possède >"
+Medecin        "1"  *--  "0..*"  Disponibilite    : "contient >"
+Medecin        "1"  o--  "0..*"  RendezVous       : "reçoit >"
+Medecin        "1"  o--  "0..*"  Avis             : "reçoit >"
+Patient        "1"  o--  "0..*"  Avis             : "rédige >"
+Avis           "1"  -->  "1"     RendezVous        : "référence >"
+RechercheMedecin "1" --> "0..*"  Medecin          : "interroge >"
+Notification   "1"  -->  "1"     Utilisateur      : "destinée à >"
+
+RendezVous     "1"  -->  "1"     Statut           : "a statut"
+Notification   "1"  -->  "1"     TypeNotification  : "de type"
+
+@enduml

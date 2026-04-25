@@ -1,0 +1,91 @@
+@startuml DCU_TabibOnline
+
+left to right direction
+skinparam actorStyle awesome
+skinparam backgroundColor #FEFEFE
+skinparam ArrowColor #2C3E7A
+skinparam ActorBorderColor      #2C3E7A
+skinparam ActorBackgroundColor  #EEF4FF
+skinparam UseCaseBorderColor    #2C3E7A
+skinparam UseCaseBackgroundColor #EEF4FF
+skinparam UseCaseFontSize 12
+skinparam packageStyle rectangle
+
+title Diagramme de Cas d'Utilisation — TabibOnline\nProjet AGL 2025/2026 — FSEGT, Tunis El Manar
+
+' ─── Acteurs ──────────────────────────────────────────────────────────────────
+actor "Visiteur"        as Visiteur
+actor "Patient"         as Patient
+actor "Médecin"         as Medecin
+actor "Administrateur"  as Admin
+
+' Héritage des acteurs
+Patient --|> Visiteur
+Medecin --|> Visiteur
+
+' ─── Système ──────────────────────────────────────────────────────────────────
+rectangle "Système TabibOnline" {
+
+  ' -- Cas d'utilisation Visiteur --
+  usecase "Consulter la liste\ndes médecins"          as UC01
+  usecase "Rechercher un médecin\npar spécialité"     as UC02
+  usecase "Consulter le profil\nd'un médecin"         as UC03
+  usecase "Consulter les avis\nd'un médecin"          as UC04
+
+  ' -- Cas d'utilisation Patient --
+  usecase "S'inscrire sur\nla plateforme"             as UC05
+  usecase "Se connecter"                              as UC06
+  usecase "Prendre un\nrendez-vous"                   as UC07
+  usecase "Annuler un\nrendez-vous"                   as UC08
+  usecase "Laisser un avis\net une note"              as UC09
+  usecase "Consulter son\nhistorique de RDV"          as UC10
+  usecase "Recevoir une\nnotification"                as UC11
+
+  ' -- Cas d'utilisation Médecin --
+  usecase "Gérer son profil\nprofessionnel"           as UC12
+  usecase "Gérer ses créneaux\nde disponibilité"      as UC13
+  usecase "Confirmer un RDV"                          as UC14
+  usecase "Consulter ses RDV\nà venir"                as UC15
+
+  ' -- Cas d'utilisation Administrateur --
+  usecase "Valider l'inscription\nd'un médecin"       as UC16
+  usecase "Rejeter l'inscription\nd'un médecin"       as UC17
+  usecase "Gérer les utilisateurs"                    as UC18
+  usecase "Consulter le tableau\nde bord (stats)"     as UC19
+}
+
+' ─── Associations acteurs → cas d'utilisation ─────────────────────────────────
+Visiteur --> UC01
+Visiteur --> UC02
+Visiteur --> UC03
+Visiteur --> UC04
+
+Patient  --> UC05
+Patient  --> UC06
+Patient  --> UC07
+Patient  --> UC08
+Patient  --> UC09
+Patient  --> UC10
+Patient  --> UC11
+
+Medecin  --> UC12
+Medecin  --> UC13
+Medecin  --> UC14
+Medecin  --> UC15
+
+Admin    --> UC16
+Admin    --> UC17
+Admin    --> UC18
+Admin    --> UC19
+
+' ─── Relations <<include>> et <<extend>> ──────────────────────────────────────
+UC07 .> UC06 : <<include>>
+UC08 .> UC06 : <<include>>
+UC09 .> UC06 : <<include>>
+UC10 .> UC06 : <<include>>
+UC14 .> UC15 : <<include>>
+
+UC11 .> UC07 : <<extend>>
+UC17 .> UC16 : <<extend>>
+
+@enduml

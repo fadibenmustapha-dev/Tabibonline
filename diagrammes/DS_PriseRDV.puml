@@ -1,0 +1,115 @@
+@startuml DS_PriseRDV
+
+skinparam backgroundColor       #FEFEFE
+skinparam sequenceArrowColor    #2C3E7A
+skinparam sequenceLifeLineBorderColor  #2C3E7A
+skinparam sequenceParticipantBorderColor    #2C3E7A
+skinparam sequenceParticipantBackgroundColor #EEF4FF
+skinparam noteBorderColor       #2C3E7A
+skinparam noteBackgroundColor   #FFFDE7
+skinparam sequenceGroupBorderColor #2C3E7A
+
+title Diagramme de Séquence — Prise de Rendez-Vous\nScénario : Fatma (Patient) → Dr. Gharbi (Cardiologue)\nProjet AGL 2025/2026 — FSEGT, Tunis El Manar
+
+actor       "Patient\n(Fatma)"          as Patient
+participant "Interface\nUtilisateur"    as UI
+participant "RechercheMedecin"          as Recherche
+participant "Medecin\n(Dr. Gharbi)"     as Medecin
+participant "Disponibilite\n(Créneau)"  as Dispo
+participant "RendezVous"                as RDV
+participant "Notification"              as Notif
+
+' ─── Étape 1 : Connexion ────────────────────────────────────────────────────
+Patient -> UI       : seConnecter("fatma@gmail.com", "pass123")
+activate UI
+UI --> Patient      : connexion réussie ✓
+deactivate UI
+
+' ─── Étape 2 : Recherche de médecin ─────────────────────────────────────────
+Patient -> UI       : rechercherMedecin("Cardiologue")
+activate UI
+
+UI -> Recherche     : rechercherParSpecialite("Cardiologue")
+activate Recherche
+
+loop pour chaque Médecin dans listeMedecins
+  Recherche -> Medecin : isEstValide()
+  Medecin --> Recherche : true / false
+end
+
+Recherche --> UI    : List<Medecin> [Dr. Gharbi]
+deactivate Recherche
+
+UI --> Patient      : Afficher résultats (Dr. Gharbi | 80 DT | Cardiologue)
+deactivate UI
+
+' ─── Étape 3 : Sélection du médecin → affichage des créneaux ────────────────
+Patient -> UI       : selectionnerMedecin(Dr. Gharbi)
+activate UI
+UI -> Medecin       : getDisponibilitesLibres()
+activate Medecin
+Medecin --> UI      : [Lundi 09:00, Lundi 10:00, Mercredi 14:00]
+deactivate Medecin
+UI --> Patient      : Afficher créneaux disponibles
+deactivate UI
+
+' ─── Étape 4 : Choix du créneau et réservation ──────────────────────────────
+Patient -> UI       : choisirCreneau("Lundi", "09:00", "Consultation cardiologique")
+activate UI
+
+UI -> Dispo         : isEstDisponible()
+activate Dispo
+Dispo --> UI        : true
+deactivate Dispo
+
+alt Créneau disponible
+
+  UI -> RDV         : new RendezVous(patient, Dr.Gharbi, "28/04/2026", "09:00", "Consultation")
+  activate RDV
+  UI -> RDV         : confirmer()
+  RDV --> UI        : statut = CONFIRME
+  deactivate RDV
+
+  UI -> Dispo       : reserver()
+  activate Dispo
+  Dispo --> UI      : estDisponible = false
+  deactivate Dispo
+
+  UI -> Notif       : new Notification(CONFIRMATION_RDV, patient)
+  activate Notif
+  UI -> Notif       : envoyer()
+  Notif --> Patient : "[NOTIF] RDV confirmé le 28/04 à 09:00 ✓"
+  deactivate Notif
+
+  UI --> Patient    : ✅ RDV #1 confirmé avec Dr. Gharbi
+
+else Créneau déjà réservé
+
+  UI -> Dispo       : isEstDisponible()
+  activate Dispo
+  Dispo --> UI      : false
+  deactivate Dispo
+  UI --> Patient    : ❌ Créneau indisponible, veuillez choisir un autre créneau
+
+end
+
+deactivate UI
+
+' ─── Étape 5 : Fin de consultation → notation possible ──────────────────────
+note over RDV
+  Après la consultation,
+  le médecin marque le RDV
+  comme TERMINÉ → notation
+  possible pour le patient.
+end note
+
+Patient -> UI       : terminerRdv(rdv1)
+activate UI
+UI -> RDV           : terminer()
+activate RDV
+RDV --> UI          : statut = TERMINE
+deactivate RDV
+UI --> Patient      : RDV terminé — vous pouvez laisser un avis
+deactivate UI
+
+@enduml
